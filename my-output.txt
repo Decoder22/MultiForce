@@ -1,0 +1,2 @@
+Approval Required: You are about to run this Sudo Command with administrative privileges. Please enter your password and press OK to proceed.
+Filtering the log data using "subsystem CONTAINS "com.raycast""
