@@ -8,8 +8,8 @@ import { OrgListUtil } from "./orgListUtil";
 import isWsl from 'is-wsl';
 import { execSync } from 'node:child_process';
 import sfOrgUtils from "./sfOrgUtils";
-// import common from "./common";
-// import open, { apps, AppName } from 'open';
+import common from "./common";
+import open, { apps, AppName } from 'open';
 
 const SF_PATH = '/opt/homebrew/bin'
 
@@ -41,11 +41,11 @@ export async function getOrgList(): Promise<Org[]> {
     //     return [];
     // }
 
-    const metaConfigs = await OrgListUtil.readLocallyValidatedMetaConfigsGroupedByOrgType(
-        await getAuthFileNames(),
-        false
-      );
-      console.log(metaConfigs)
+    // const metaConfigs = await OrgListUtil.readLocallyValidatedMetaConfigsGroupedByOrgType(
+    //     await getAuthFileNames(),
+    //     false
+    //   );
+    //   console.log(metaConfigs)
 
     // const authInfos = await AuthInfo.listAllAuthorizations();
     // const orgs = authInfos.map((authInfo) => {
@@ -60,27 +60,27 @@ export async function getOrgList(): Promise<Org[]> {
     return []
 }
 
-// export async function executeLoginFlow(oauthConfig: OAuth2Config, browser?: string): Promise<AuthInfo> {
-//   const oauthServer = await WebOAuthServer.create({ oauthConfig });
-//   await oauthServer.start();
-//   const app = browser && browser in apps ? (browser as AppName) : undefined;
-//   const openOptions = app ? { app: { name: apps[app] }, wait: false } : { wait: false };
-//   await open(oauthServer.getAuthorizationUrl(), openOptions);
-//   return oauthServer.authorizeAndSave();
-// }
+export async function executeLoginFlow(oauthConfig: OAuth2Config, browser?: string): Promise<AuthInfo> {
+  const oauthServer = await WebOAuthServer.create({ oauthConfig });
+  await oauthServer.start();
+  const app = browser && browser in apps ? (browser as AppName) : undefined;
+  const openOptions = app ? { app: { name: apps[app] }, wait: false } : { wait: false };
+  await open(oauthServer.getAuthorizationUrl(), openOptions);
+  return oauthServer.authorizeAndSave();
+}
 
 
 export async function authorizeOrg(toAuth: AuthOrgValues) {
-    let script = `do shell script "export PATH=$PATH:${SF_PATH}; `;
-    if(toAuth.type === ' dev'){
-        script += `sf org login web --set-default-dev-hub --alias ${toAuth.alias};"`
-    }
-    else {
-        script += `sf org login web --alias ${toAuth.alias} --instance-url ${toAuth.url};"`
-    }
-    console.log(script)
+    // let script = `do shell script "export PATH=$PATH:${SF_PATH}; `;
+    // if(toAuth.type === ' dev'){
+    //     script += `sf org login web --set-default-dev-hub --alias ${toAuth.alias};"`
+    // }
+    // else {
+    //     script += `sf org login web --alias ${toAuth.alias} --instance-url ${toAuth.url};"`
+    // }
+    // console.log(script)
     // return runAppleScript(script);
- /*
+ 
     const oauthConfig: OAuth2Config = {
       loginUrl: await common.resolveLoginUrl(toAuth.url)
     };
@@ -101,7 +101,7 @@ export async function authorizeOrg(toAuth: AuthOrgValues) {
     } catch (err) {
       console.error(err)
     }
-      */
+      
 }
 
 
@@ -167,7 +167,7 @@ export async function openOrg(orgAlias: string) {
     const filePathUrl = isWsl
       ? 'file:///' + execSync(`wslpath -m ${tempFilePath}`).toString().trim()
       : `file:///${tempFilePath}`;
-    const cp = await sfOrgUtils.openUrl(filePathUrl, {
+    const cp = await sfOrgUtils.openUrlUtil(filePathUrl, {
       ...{},
       ...{},
     });

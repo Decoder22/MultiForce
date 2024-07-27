@@ -16,7 +16,17 @@ export const getAliasByUsername = async (username: string): Promise<string | und
   return keys?.length ? keys[keys.length - 1] : undefined;
 };
 
-export const openUrl = async (url: string, options: Options): Promise<ChildProcess> => open(url, options);
+export const openUrlUtil = async (url: string, options: Options): Promise<ChildProcess> => {
+  console.log(url)
+  if(url != null){
+    return open(url, options);
+  }
+  else {
+    return new Promise((resolve) => {
+      return new ChildProcess()
+    })
+  } 
+};
 
 export const lowerToUpper = (object: Record<string, unknown>): Record<string, unknown> =>
   // the API has keys defined in capital camel case, while the definition schema has them as lower camel case
@@ -25,7 +35,7 @@ export const lowerToUpper = (object: Record<string, unknown>): Record<string, un
 
 export default {
   getAliasByUsername,
-  openUrl,
+  openUrlUtil,
   lowerToUpper,
 };
 
