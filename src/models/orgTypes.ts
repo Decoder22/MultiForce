@@ -5,7 +5,7 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { AuthFields, ScratchOrgInfo } from '@salesforce/core';
+import { AuthFields, ScratchOrgInfo } from "@salesforce/core";
 
 export type OrgDisplayReturn = Partial<ScratchOrgFields> & {
   username: string;
@@ -28,7 +28,7 @@ export type OrgDisplayReturn = Partial<ScratchOrgFields> & {
  * core's AuthFields has everything as optional.
  *
  * In this case, we have a username because these come from auth files */
-export type AuthFieldsFromFS = Omit<AuthFields, 'expirationDate'> & {
+export type AuthFieldsFromFS = Omit<AuthFields, "expirationDate"> & {
   username: string;
   orgId: string;
   accessToken: string;
@@ -53,7 +53,7 @@ export type FullyPopulatedScratchOrgFields = ScratchOrgFields &
 // developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_objects_scratchorginfo.htm
 export type ScratchOrgInfoSObject = {
   CreatedDate: string;
-  Status: 'New' | 'Deleted' | 'Active' | 'Error';
+  Status: "New" | "Deleted" | "Active" | "Error";
   ExpirationDate: string;
   CreatedBy: {
     Username: string;
@@ -83,7 +83,7 @@ export type OrgListFields = {
   connectedStatus?: string;
   isDefaultUsername?: boolean;
   isDefaultDevHubUsername?: boolean;
-  defaultMarker?: '(D)' | '(U)';
+  defaultMarker?: "(D)" | "(U)";
   attributes?: Record<string, unknown>;
   lastUsed?: Date;
 };
@@ -98,8 +98,8 @@ export type ScratchCreateResponse = {
 };
 
 export enum SandboxLicenseType {
-  developer = 'Developer',
-  developerPro = 'Developer_Pro',
-  partial = 'Partial',
-  full = 'Full',
+  developer = "Developer",
+  developerPro = "Developer_Pro",
+  partial = "Partial",
+  full = "Full",
 }

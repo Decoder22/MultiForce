@@ -1,9 +1,9 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "salesforce-developer-login",
-  "title": "Salesforce Developer Logins",
+  "name": "multi-force",
+  "title": "MultiForce",
   "description": "Allows a Salesforce Developer to access and authenticate orgs availabe via the SF command line tools.",
-  "icon": "command-icon.png",
+  "icon": "multiforce-icon.png",
   "author": "brian_j_decoder22",
   "categories": [
     "Developer Tools"
@@ -12,8 +12,8 @@
   "commands": [
     {
       "name": "index",
-      "title": "Open Salesforce",
-      "subtitle": "Open Salesforce in your browser",
+      "title": "MultiForce",
+      "subtitle": "Open a Salesforce org in your browser",
       "description": "Select a Salesforce login to authenticate and open in your preferred browser.",
       "mode": "view"
     }
