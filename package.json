@@ -42,7 +42,7 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "build": "ray build -e dist",
+    "build": "npx babel node_modules/open/index.js --out-file node_modules/open/index.js && ray build -e dist",
     "dev": "npx babel node_modules/open/index.js --out-file node_modules/open/index.js && ray develop",
     "fix-lint": "ray lint --fix",
     "lint": "ray lint",
