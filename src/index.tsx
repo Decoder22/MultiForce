@@ -4,7 +4,6 @@ import { AuthenticateNewOrg } from "./components/AuthenticateNewOrg";
 import { DeveloperOrg } from "./models/models";
 import { openOrg, getOrgList, deleteOrg } from "./utils/sf";
 import { loadOrgs, saveOrgs } from "./utils/storage-management";
-import { OrgDetails } from "./components/OrgDetails";
 
 export default function Command() {
   const [orgs, setOrgs] = useState<DeveloperOrg[]>([]);
@@ -49,19 +48,19 @@ export default function Command() {
     const newOrgs = await getOrgList();
 
     // Create a map from the new orgs for quick lookup
-    const newOrgsMap = new Map(newOrgs.map(org => [org.username, org]));
+    const newOrgsMap = new Map(newOrgs.map((org) => [org.username, org]));
 
     // Filter the existing orgs to include only those that exist in the new list
-    const updatedOrgs = orgs.filter(org => newOrgsMap.has(org.username));
+    const updatedOrgs = orgs.filter((org) => newOrgsMap.has(org.username));
 
     // Merge the existing org fields with the new org fields
-    const mergedOrgs = updatedOrgs.map(org => ({
-        ...org,
-        ...newOrgsMap.get(org.username)
+    const mergedOrgs = updatedOrgs.map((org) => ({
+      ...org,
+      ...newOrgsMap.get(org.username),
     }));
 
     // Add new orgs that are not present in the existing list
-    const additionalOrgs = newOrgs.filter(org => !orgs.some(existingOrg => existingOrg.username === org.username));
+    const additionalOrgs = newOrgs.filter((org) => !orgs.some((existingOrg) => existingOrg.username === org.username));
 
     // Combine merged orgs and additional new orgs
     const combinedOrgs = [...mergedOrgs, ...additionalOrgs];
@@ -82,11 +81,11 @@ export default function Command() {
       style: Toast.Style.Animated,
       title: `Deleting ${org.alias}`,
     });
-    await deleteOrg(org.username)
-    await refreshOrgs()
+    await deleteOrg(org.username);
+    await refreshOrgs();
     setIsLoading(false);
     toast.hide();
-  }
+  };
 
   return (
     <List isLoading={isLoading}>

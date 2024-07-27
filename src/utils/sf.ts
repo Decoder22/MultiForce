@@ -2,7 +2,16 @@ import path from "node:path";
 import { platform, tmpdir } from "node:os";
 import fs from "node:fs";
 import { sleep } from "@salesforce/kit";
-import { AuthInfo, AuthRemover, Connection, OAuth2Config, Org, SfdcUrl, SfError, WebOAuthServer } from "@salesforce/core";
+import {
+  AuthInfo,
+  AuthRemover,
+  Connection,
+  OAuth2Config,
+  Org,
+  SfdcUrl,
+  SfError,
+  WebOAuthServer,
+} from "@salesforce/core";
 import isWsl from "is-wsl";
 import { execSync } from "node:child_process";
 import sfOrgUtils from "./sfOrgUtils";
@@ -132,7 +141,7 @@ export async function openOrg(orgAlias: string) {
   }
 }
 
-export async function deleteOrg(username: string){
+export async function deleteOrg(username: string) {
   process.env["SF_DISABLE_LOG_FILE"] = "true";
   const remover = await AuthRemover.create();
   await remover.removeAuth(username);
