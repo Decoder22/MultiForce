@@ -11,9 +11,8 @@ import sfOrgUtils from "./sfOrgUtils";
 import common from "./common";
 import open, { apps, AppName } from 'open';
 
-const SF_PATH = '/opt/homebrew/bin'
 
-export async function getOrgList(): Promise<Org[]> {
+export async function getOrgList(): Promise<SfOrg[]> {
     process.env['SF_DISABLE_LOG_FILE'] = 'true';
 
     const getAuthFileNames = async (): Promise<string[]> => {
@@ -24,40 +23,38 @@ export async function getOrgList(): Promise<Org[]> {
           throw err
         }
       };
-    // try {
-    //     const output = await runAppleScript(`do shell script "export PATH=$PATH:${SF_PATH}; sf org list --json"`);
+    // // try {
+    // //     const output = await runAppleScript(`do shell script "export PATH=$PATH:${SF_PATH}; sf org list --json"`);
 
-    //     const orgs = JSON.parse(output);
-    //     const flatOrgList = [...orgs.result.other,...orgs.result.sandboxes,...orgs.result.nonScratchOrgs,...orgs.result.devHubs,...orgs.result.scratchOrgs]
-    //     const parsedOutput: Org[]  = []
-    //     for(const org of flatOrgList){
-    //         if(!parsedOutput.find((item) => item.alias === org.alias && item.username === org.username)){
-    //         parsedOutput.push({ alias:org.alias, username:org.username})
-    //         }
-    //     };
-    //     return parsedOutput;
-    // } catch (error) {
-    //     console.error("Error fetching org list:", error);
-    //     return [];
-    // }
+    // //     const orgs = JSON.parse(output);
+    // //     const flatOrgList = [...orgs.result.other,...orgs.result.sandboxes,...orgs.result.nonScratchOrgs,...orgs.result.devHubs,...orgs.result.scratchOrgs]
+    // //     const parsedOutput: Org[]  = []
+    // //     for(const org of flatOrgList){
+    // //         if(!parsedOutput.find((item) => item.alias === org.alias && item.username === org.username)){
+    // //         parsedOutput.push({ alias:org.alias, username:org.username})
+    // //         }
+    // //     };
+    // //     return parsedOutput;
+    // // } catch (error) {
+    // //     console.error("Error fetching org list:", error);
+    // //     return [];
+    // // }
 
-    // const metaConfigs = await OrgListUtil.readLocallyValidatedMetaConfigsGroupedByOrgType(
-    //     await getAuthFileNames(),
-    //     false
-    //   );
-    //   console.log(metaConfigs)
+    const metaConfigs = await OrgListUtil.readLocallyValidatedMetaConfigsGroupedByOrgType(
+        await getAuthFileNames(),
+        false
+      );
+      console.log(metaConfigs)
 
-    // const authInfos = await AuthInfo.listAllAuthorizations();
-    // const orgs = authInfos.map((authInfo) => {
-    //   const {username, orgId } = authInfo;
-    //   return {
-    //     alias: username,
-    //     username,
-    //     orgId,
-    //   };
-    // });
-    // console.log(orgs);
-    return []
+    const authInfos = await AuthInfo.listAllAuthorizations();
+    const orgs: SfOrg[] = authInfos.map((authInfo) : SfOrg => {
+      const {username } = authInfo;
+      return {
+        alias: authInfo.aliases![0],
+        username
+      };
+    });
+    return orgs
 }
 
 export async function executeLoginFlow(oauthConfig: OAuth2Config, browser?: string): Promise<AuthInfo> {
@@ -71,16 +68,7 @@ export async function executeLoginFlow(oauthConfig: OAuth2Config, browser?: stri
 
 
 export async function authorizeOrg(toAuth: AuthOrgValues) {
-    // let script = `do shell script "export PATH=$PATH:${SF_PATH}; `;
-    // if(toAuth.type === ' dev'){
-    //     script += `sf org login web --set-default-dev-hub --alias ${toAuth.alias};"`
-    // }
-    // else {
-    //     script += `sf org login web --alias ${toAuth.alias} --instance-url ${toAuth.url};"`
-    // }
-    // console.log(script)
-    // return runAppleScript(script);
- 
+  process.env['SF_DISABLE_LOG_FILE'] = 'true';
     const oauthConfig: OAuth2Config = {
       loginUrl: await common.resolveLoginUrl(toAuth.url)
     };

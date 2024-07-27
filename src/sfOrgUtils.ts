@@ -22,7 +22,7 @@ export const openUrlUtil = async (url: string, options: Options): Promise<ChildP
     return open(url, options);
   }
   else {
-    return new Promise((resolve) => {
+    return new Promise( () => {
       return new ChildProcess()
     })
   } 

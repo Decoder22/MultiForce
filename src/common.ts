@@ -5,28 +5,25 @@
  * For full license text, see LICENSE.txt file in the repo root or https://opensource.org/licenses/BSD-3-Clause
  */
 
-import { Logger, SfdcUrl, SfProject, Global, Mode } from '@salesforce/core';
+import { SfdcUrl, SfProject } from '@salesforce/core';
 import { getString, isObject } from '@salesforce/ts-types';
-import { prompts, StandardColors } from '@salesforce/sf-plugins-core';
 
 
 const resolveLoginUrl = async (instanceUrl?: string): Promise<string> => {
-  const logger = await Logger.child('Common', { tag: 'resolveLoginUrl' });
-  const loginUrl = instanceUrl ?? (await getLoginUrl(logger));
+  const loginUrl = instanceUrl ?? (await getLoginUrl());
   throwIfLightning(loginUrl);
-  logger.debug(`loginUrl: ${loginUrl}`);
   return loginUrl;
 };
 
 /** try to get url from project if there is one, otherwise use the default production URL  */
-const getLoginUrl = async (logger: Logger): Promise<string> => {
+const getLoginUrl = async (): Promise<string> => {
   try {
     const project = await SfProject.resolve();
     const projectJson = await project.resolveProjectConfig();
     return getString(projectJson, 'sfdcLoginUrl', SfdcUrl.PRODUCTION);
   } catch (err) {
     const message: string = (isObject(err) ? Reflect.get(err, 'message') ?? err : err) as string;
-    logger.debug(`error occurred while trying to determine loginUrl: ${message}`);
+    console.error(message)
     return SfdcUrl.PRODUCTION;
   }
 };
@@ -40,12 +37,6 @@ const throwIfLightning = (urlString: string): void => {
   }
 };
 
-const shouldExitCommand = async (noPrompt?: boolean): Promise<boolean> =>
-  Boolean(noPrompt) || Global.getEnvironmentMode() !== Mode.DEMO
-    ? false
-    : !(await prompts.confirm({ message: StandardColors.info('Something broke!!!'), ms: 60_000 }));
-
 export default {
-  shouldExitCommand,
-  resolveLoginUrl,
+  resolveLoginUrl
 };
