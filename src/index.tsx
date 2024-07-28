@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { List, ActionPanel, Action, showToast, Toast, popToRoot, Detail } from "@raycast/api";
+import { List, ActionPanel, Action, showToast, Toast, popToRoot } from "@raycast/api";
 import { AuthenticateNewOrg } from "./components/AuthenticateNewOrg";
 import { DeveloperOrg } from "./models/models";
 import { openOrg, getOrgList, deleteOrg } from "./utils/sf";
@@ -87,11 +87,9 @@ export default function Command() {
     toast.hide();
   };
 
-
-  return (
-    orgs.length === 0 ?
-    <EmptyOrgList/>
-    :
+  return orgs.length === 0 ? (
+    <EmptyOrgList />
+  ) : (
     <List isLoading={isLoading}>
       {orgs.map((org, index) => (
         <List.Item
