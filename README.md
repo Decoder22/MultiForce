@@ -22,7 +22,7 @@ Opening MultiForce shows you a list of all Salesforce orgs you have authenticate
 
 ### Download and Install Raycast
 
-To install MultiForce, you first need to have downloaded and setup [Raycast](https://www.raycast.com/), a spotlight search replacement tool. When you set Raycast up, it is recommended that you re-bind `⌘ + Space` in settings to use Raycast instead of the default spotlight search on Mac.
+To install MultiForce, you first need to have downloaded and setup [Raycast](https://www.raycast.com/), a spotlight search replacement tool. When you set Raycast up, it is recommended that you re-bind `⌘ + Space` in settings to use Raycast instead of the default spotlight search on Mac. [Instructions](https://manual.raycast.com/hotkey)
 
 ### Install MultiForce
 
@@ -38,8 +38,8 @@ To install the beta version of MultiForce, open a terminal and run the following
 ```bash
 git clone https://github.com/Decoder22/MultiForce.git
 cd MultiForce/
-npm run install
-npm run build
+npm install
+npm run dev
 ```
 
 Now, you can open Raycast and search for `MultiForce` and it will be installed on your computer.
