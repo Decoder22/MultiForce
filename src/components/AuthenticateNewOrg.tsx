@@ -3,6 +3,7 @@ import { ActionPanel, Action, Form, popToRoot } from "@raycast/api";
 import { AuthenticateNewOrgFormData, DeveloperOrg } from "../models/models";
 import { authorizeOrg } from "../utils/sf";
 import { loadOrgs, saveOrgs } from "../utils/storage-management";
+import { MISC_ORGS_SECTION_LABEL, NEW_SECTION_LABEL } from "../utils/constants";
 
 const HEX_REGEX = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{8}|[A-Fa-f0-9]{4})$/;
 

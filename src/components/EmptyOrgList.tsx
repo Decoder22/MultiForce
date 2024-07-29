@@ -1,20 +1,9 @@
 import { Action, ActionPanel, Detail } from "@raycast/api";
 import { AuthenticateNewOrg } from "./AuthenticateNewOrg";
-import { saveOrgs } from "../utils/storage-management";
-import { DeveloperOrg } from "../models/models";
 
-export function EmptyOrgList() {
+export function EmptyOrgList(props: { callback: () => Promise<void> }) {
   const markdown =
     "# Welcome to MultiForce!\nYour easy tool for logging in to your Salesforce orgs!\n\nIt doesn't look like you have added any orgs yet. Press **Enter** to authenticate your first org!";
-
-  const addOrg = async (org: DeveloperOrg) => {
-    console.log("Added Org");
-    try {
-      saveOrgs([org]);
-    } catch (ex) {
-      console.error(ex);
-    }
-  };
 
   return (
     <Detail
@@ -23,7 +12,7 @@ export function EmptyOrgList() {
         <ActionPanel>
           <Action.Push
             title="Authenticate a New Org"
-            target={<AuthenticateNewOrg addOrg={addOrg} />}
+            target={<AuthenticateNewOrg callback={props.callback} />}
             shortcut={{ modifiers: ["cmd"], key: "n" }}
           />
         </ActionPanel>

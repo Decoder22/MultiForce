@@ -98,7 +98,7 @@ export default function Command() {
   };
 
   return Array.from(orgs.keys()).length === 0 && !isLoading ? (
-    <EmptyOrgList />
+    <EmptyOrgList callback={refreshOrgs} />
   ) : (
     <List isLoading={isLoading}>
       {Array.from(orgs.keys())
