@@ -97,13 +97,19 @@ export function AuthenticateNewOrg(props: { callback: () => Promise<void> }) {
                 setShowColorError(undefined);
               }
               if (
-                values.url &&
+                (values.url || values.type === "dev") &&
                 values.alias &&
                 values.color &&
                 (values.section !== "New Section" || values.newSectionName)
               ) {
                 authorizeOrg(values).then((fields) => {
-                  addOrg({ ...fields, alias: values.alias, color: values.color, label: values.label } as DeveloperOrg);
+                  addOrg({
+                    ...fields,
+                    alias: values.alias,
+                    color: values.color,
+                    label: values.label,
+                    section: values.section === NEW_SECTION_LABEL ? values.newSectionName : values.section,
+                  } as DeveloperOrg);
                   popToRoot();
                 });
               }
