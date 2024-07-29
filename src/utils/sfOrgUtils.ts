@@ -13,7 +13,6 @@ export const getAliasByUsername = async (username: string): Promise<string | und
   return keys?.length ? keys[keys.length - 1] : undefined;
 };
 
-
 export default {
   getAliasByUsername,
 };

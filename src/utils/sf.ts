@@ -2,15 +2,7 @@ import path from "node:path";
 import { platform, tmpdir } from "node:os";
 import fs from "node:fs";
 import { sleep } from "@salesforce/kit";
-import {
-  AuthInfo,
-  AuthRemover,
-  Connection,
-  OAuth2Config,
-  Org,
-  SfdcUrl,
-  WebOAuthServer,
-} from "@salesforce/core";
+import { AuthInfo, AuthRemover, Connection, OAuth2Config, Org, SfdcUrl, WebOAuthServer } from "@salesforce/core";
 import isWsl from "is-wsl";
 import { execSync } from "node:child_process";
 import { DeveloperOrg, AuthenticateNewOrgFormData } from "../models/models";
@@ -25,7 +17,7 @@ export async function getOrgList(): Promise<DeveloperOrg[]> {
     return {
       alias: authInfo.aliases![0],
       username,
-      instanceUrl: authInfo.instanceUrl ?? ''
+      instanceUrl: authInfo.instanceUrl ?? "",
     };
   });
   return orgs;
@@ -89,51 +81,49 @@ export async function openOrg(orgAlias: string) {
     return `${instanceUrlClean}/secur/frontdoor.jsp?sid=${accessToken}`;
   };
   // try {
-  
-    const targetOrg = await Org.create({ aliasOrUsername: orgAlias });
-    const conn = targetOrg.getConnection();
-    // const env = new Env();
-    const [frontDoorUrl, retUrl] = await Promise.all([
-      buildFrontdoorUrl(targetOrg, conn),
-      "lightning/setup/FlexiPageList/home",
-    ]);
 
+  const targetOrg = await Org.create({ aliasOrUsername: orgAlias });
+  const conn = targetOrg.getConnection();
+  // const env = new Env();
+  const [frontDoorUrl, retUrl] = await Promise.all([
+    buildFrontdoorUrl(targetOrg, conn),
+    "lightning/setup/FlexiPageList/home",
+  ]);
 
-    const url = `${frontDoorUrl}${retUrl ? `&retURL=${retUrl}` : ""}`;
+  const url = `${frontDoorUrl}${retUrl ? `&retURL=${retUrl}` : ""}`;
 
-    // const orgId = targetOrg.getOrgId();
+  // const orgId = targetOrg.getOrgId();
 
-    // const username = targetOrg.getUsername() as string;
+  // const username = targetOrg.getUsername() as string;
 
-    await new SfdcUrl(url).checkLightningDomain();
+  await new SfdcUrl(url).checkLightningDomain();
 
-    // create a local html file that contains the POST stuff.
-    const tempFilePath = path.join(tmpdir(), `org-open-${new Date().valueOf()}.html`);
-    await fs.promises.writeFile(
-      tempFilePath,
-      getFileContents(
-        conn.accessToken as string,
-        conn.instanceUrl,
-        // the path flag is URI-encoded in its `parse` func.
-        // For the form redirect to work we need it decoded.
-        retUrl,
-      ),
-    );
+  // create a local html file that contains the POST stuff.
+  const tempFilePath = path.join(tmpdir(), `org-open-${new Date().valueOf()}.html`);
+  await fs.promises.writeFile(
+    tempFilePath,
+    getFileContents(
+      conn.accessToken as string,
+      conn.instanceUrl,
+      // the path flag is URI-encoded in its `parse` func.
+      // For the form redirect to work we need it decoded.
+      retUrl,
+    ),
+  );
 
-    const filePathUrl = isWsl
-      ? "file:///" + execSync(`wslpath -m ${tempFilePath}`).toString().trim()
-      : `file:///${tempFilePath}`;
-    try{
-      open(filePathUrl);
-    }
-    catch(error){
-      fileCleanup(tempFilePath);
-      console.error(error)
-    }
-    // so we don't delete the file while the browser is still using it
-    // open returns when the CP is spawned, but there's not way to know if the browser is still using the file
-    await sleep(platform() === "win32" || isWsl ? 7000 : 5000);
+  const filePathUrl = isWsl
+    ? "file:///" + execSync(`wslpath -m ${tempFilePath}`).toString().trim()
+    : `file:///${tempFilePath}`;
+  try {
+    open(filePathUrl);
+  } catch (error) {
     fileCleanup(tempFilePath);
+    console.error(error);
+  }
+  // so we don't delete the file while the browser is still using it
+  // open returns when the CP is spawned, but there's not way to know if the browser is still using the file
+  await sleep(platform() === "win32" || isWsl ? 7000 : 5000);
+  fileCleanup(tempFilePath);
 }
 
 export async function deleteOrg(username: string) {

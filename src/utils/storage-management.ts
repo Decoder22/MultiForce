@@ -18,10 +18,10 @@ export async function loadSfPath(): Promise<string | undefined> {
   return storage ? (JSON.parse(storage) as string) : undefined;
 }
 
-export async function updateOrg(org: DeveloperOrg){ 
-  const orgs = await loadOrgs()
-  const matchedOrg = orgs!.find((og) => og.alias === org.alias)
+export async function updateOrg(org: DeveloperOrg) {
+  const orgs = await loadOrgs();
+  const matchedOrg = orgs!.find((og) => og.alias === org.alias);
   Object.assign(matchedOrg!, org);
-  console.log('POST UPDATE:')
-  console.log(org)
+  console.log("POST UPDATE:");
+  console.log(org);
 }

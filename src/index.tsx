@@ -101,44 +101,46 @@ export default function Command() {
     <EmptyOrgList />
   ) : (
     <List isLoading={isLoading}>
-      {Array.from(orgs.keys()).sort().map((key, keyIndex) =>
-        orgs.get(key) && orgs.get(key)!.length > 0 ? (
-          <List.Section title={key} key={keyIndex}>
-            {orgs.get(key)!.map((org, index) => (
-              <List.Item
-                key={index}
-                icon={{ source: "Salesforce.com_logo.svg.png", tintColor: org.color ?? "#0000FF" }}
-                title={org.label ? `${org.label} (${org.alias})` : org.alias}
-                actions={
-                  <ActionPanel>
-                    <Action title="Open" onAction={() => handleOrgSelection(org.alias)} />
-                    <Action.Push
-                      title="Open Details"
-                      target={<DeveloperOrgDetails org={org} callback={refreshOrgs} />}
-                      shortcut={{ modifiers: ["cmd"], key: "return" }}
-                    />
-                    <Action
-                      title="Refresh Org List"
-                      onAction={() => refreshOrgs()}
-                      shortcut={{ modifiers: ["cmd"], key: "r" }}
-                    />
-                    <Action.Push
-                      title="Authenticate a New Org"
-                      target={<AuthenticateNewOrg callback={refreshOrgs} />}
-                      shortcut={{ modifiers: ["cmd"], key: "n" }}
-                    />
-                    <Action.Push
-                      title="Delete Org"
-                      target={<ConfirmDeletion org={org} callback={refreshOrgs} />}
-                      shortcut={{ modifiers: ["cmd"], key: "d" }}
-                    />
-                  </ActionPanel>
-                }
-              />
-            ))}
-          </List.Section>
-        ) : null,
-      )}
+      {Array.from(orgs.keys())
+        .sort()
+        .map((key, keyIndex) =>
+          orgs.get(key) && orgs.get(key)!.length > 0 ? (
+            <List.Section title={key} key={keyIndex}>
+              {orgs.get(key)!.map((org, index) => (
+                <List.Item
+                  key={index}
+                  icon={{ source: "Salesforce.com_logo.svg.png", tintColor: org.color ?? "#0000FF" }}
+                  title={org.label ? `${org.label} (${org.alias})` : org.alias}
+                  actions={
+                    <ActionPanel>
+                      <Action title="Open" onAction={() => handleOrgSelection(org.alias)} />
+                      <Action.Push
+                        title="Open Details"
+                        target={<DeveloperOrgDetails org={org} callback={refreshOrgs} />}
+                        shortcut={{ modifiers: ["cmd"], key: "return" }}
+                      />
+                      <Action
+                        title="Refresh Org List"
+                        onAction={() => refreshOrgs()}
+                        shortcut={{ modifiers: ["cmd"], key: "r" }}
+                      />
+                      <Action.Push
+                        title="Authenticate a New Org"
+                        target={<AuthenticateNewOrg callback={refreshOrgs} />}
+                        shortcut={{ modifiers: ["cmd"], key: "n" }}
+                      />
+                      <Action.Push
+                        title="Delete Org"
+                        target={<ConfirmDeletion org={org} callback={refreshOrgs} />}
+                        shortcut={{ modifiers: ["cmd"], key: "d" }}
+                      />
+                    </ActionPanel>
+                  }
+                />
+              ))}
+            </List.Section>
+          ) : null,
+        )}
     </List>
   );
 }
