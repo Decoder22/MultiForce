@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { List, ActionPanel, Action, showToast, Toast, popToRoot } from "@raycast/api";
+import { List, ActionPanel, Action, showToast, Toast, popToRoot, Keyboard, Icon, confirmAlert } from "@raycast/api";
 import { AuthenticateNewOrg } from "./components/AuthenticateNewOrg";
 import { DeveloperOrg } from "./models/models";
-import { openOrg, getOrgList } from "./utils/sf";
+import { openOrg, getOrgList, deleteOrg } from "./utils/sf";
 import { loadOrgs, saveOrgs } from "./utils/storage-management";
 import { EmptyOrgList } from "./components/EmptyOrgList";
 import { DeveloperOrgDetails } from "./components/DeveloperOrgDetails";
-import { ConfirmDeletion } from "./components/ConfirmDeletion";
 import { MISC_ORGS_SECTION_LABEL } from "./utils/constants";
 export default function Command() {
   const [orgs, setOrgs] = useState<Map<string, DeveloperOrg[]>>(new Map<string, DeveloperOrg[]>());
@@ -102,6 +101,21 @@ export default function Command() {
     }
   };
 
+
+  const confirmDeletion = async (org:DeveloperOrg) => {
+    if(await confirmAlert({
+      title: `Are you sure you want to delete ${org.alias}?`,
+    })){
+      const toast = await showToast({
+        style: Toast.Style.Animated,
+        title: `Deleting ${org.alias}`,
+      });
+      await deleteOrg(org.username);
+      await refreshOrgs(false)
+      toast.hide();
+    }
+  }
+
   return Array.from(orgs.keys()).length === 0 && !isLoading ? (
     <EmptyOrgList callback={refreshOrgs} />
   ) : (
@@ -134,10 +148,12 @@ export default function Command() {
                         target={<AuthenticateNewOrg callback={refreshOrgs} />}
                         shortcut={{ modifiers: ["cmd"], key: "n" }}
                       />
-                      <Action.Push
+                      <Action
                         title="Delete Org"
-                        target={<ConfirmDeletion org={org} callback={refreshOrgs} />}
-                        shortcut={{ modifiers: ["cmd"], key: "d" }}
+                        style={Action.Style.Destructive}
+                        onAction={() => confirmDeletion(org)}
+                        icon={{ source: Icon.Trash }}
+                        shortcut={Keyboard.Shortcut.Common.Remove}
                       />
                     </ActionPanel>
                   }
