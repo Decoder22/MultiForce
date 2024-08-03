@@ -1,17 +1,22 @@
 import { Dispatch, useEffect, useState } from "react";
 import { ActionPanel, Action, Form, popToRoot, Icon, showToast, Toast } from "@raycast/api";
-import { authorizeOrg,loadOrgs } from "../../utils"
-import { MISC_ORGS_SECTION_LABEL, NEW_SECTION_LABEL, HEX_REGEX, DEFAULT_COLOR, COLOR_WARNING_MESSAGE } from "../../constants";
+import { authorizeOrg, loadOrgs } from "../../utils";
+import {
+  MISC_ORGS_SECTION_LABEL,
+  NEW_SECTION_LABEL,
+  HEX_REGEX,
+  DEFAULT_COLOR,
+  COLOR_WARNING_MESSAGE,
+} from "../../constants";
 import { OrgListReducerAction, OrgListReducerType, AuthenticateNewOrgFormData, DeveloperOrg } from "../../types";
 import { FormValidation, useForm } from "@raycast/utils";
 import { flattenOrgMap } from "../../utils";
 
 export function AuthenticateNewOrg(props: {
-  orgs?: Map<string,DeveloperOrg[]>, 
-  dispatch: Dispatch<OrgListReducerAction>
-}
-) {
-  const { orgs, dispatch } = props
+  orgs?: Map<string, DeveloperOrg[]>;
+  dispatch: Dispatch<OrgListReducerAction>;
+}) {
+  const { orgs, dispatch } = props;
   const [orgType, setOrgType] = useState<string>();
   const [section, setSection] = useState<string>();
   const [sections, setSections] = useState<string[]>([]);
@@ -30,74 +35,72 @@ export function AuthenticateNewOrg(props: {
       }
     }
     getSectionList();
-    setValue('color',DEFAULT_COLOR)
+    setValue("color", DEFAULT_COLOR);
   }, []);
 
   const showErrorToast = async () => {
     await showToast({
       style: Toast.Style.Failure,
       title: `Unable to authenticate org.`,
-  });
-  }
+    });
+  };
 
   const addOrg = async (org: DeveloperOrg) => {
     try {
       dispatch({
         type: OrgListReducerType.ADD_ORG,
-        newOrg: org
-      })
+        newOrg: org,
+      });
     } catch (ex) {
       console.error(ex);
-      showErrorToast()
+      showErrorToast();
     }
   };
-
 
   const { handleSubmit, itemProps, setValue } = useForm<AuthenticateNewOrgFormData>({
     onSubmit(values: AuthenticateNewOrgFormData) {
       if (values.type === "sandbox") {
-          values.url = "https://test.salesforce.com";
+        values.url = "https://test.salesforce.com";
       } else if (values.type === "prod") {
         values.url = "https://login.salesforce.com";
       }
-      try{
-        authorizeOrg(values).then((fields) => {
-          addOrg({
-            ...fields,
-            alias: values.alias,
-            color: values.color,
-            label: values.label,
-            section: values.section === NEW_SECTION_LABEL ? values.newSectionName : values.section,
-          } as DeveloperOrg);
-          popToRoot();
-        })
-        .catch((err) => {
-          console.error(err)
-          showErrorToast()
-        })
-      }
-      catch(err){
-        console.error(err)
-          showErrorToast()
+      try {
+        authorizeOrg(values)
+          .then((fields) => {
+            addOrg({
+              ...fields,
+              alias: values.alias,
+              color: values.color,
+              label: values.label,
+              section: values.section === NEW_SECTION_LABEL ? values.newSectionName : values.section,
+            } as DeveloperOrg);
+            popToRoot();
+          })
+          .catch((err) => {
+            console.error(err);
+            showErrorToast();
+          });
+      } catch (err) {
+        console.error(err);
+        showErrorToast();
       }
     },
     validation: {
       alias: (value) => {
-        if(!value){
-          return 'This item is required'
-        }
-        else if( orgs && flattenOrgMap(orgs).find(org => org.alias === value)){
-          return 'Alias already used.'
+        if (!value) {
+          return "This item is required";
+        } else if (orgs && flattenOrgMap(orgs).find((org) => org.alias === value)) {
+          return "Alias already used.";
         }
       },
       color: (value) => {
-        if(!value || !HEX_REGEX.test(value)){
-          return COLOR_WARNING_MESSAGE
+        if (!value || !HEX_REGEX.test(value)) {
+          return COLOR_WARNING_MESSAGE;
         }
       },
       url: orgType === "custom" ? FormValidation.Required : undefined,
       section: FormValidation.Required,
-      newSectionName: section === NEW_SECTION_LABEL ? FormValidation.Required: undefined,
+      newSectionName: section === NEW_SECTION_LABEL ? FormValidation.Required : undefined,
       type: FormValidation.Required,
     },
   });
@@ -106,11 +109,7 @@ export function AuthenticateNewOrg(props: {
     <Form
       actions={
         <ActionPanel>
-          <Action.SubmitForm
-            title="Authenticate"
-            icon={{ source: Icon.PlusSquare }}
-            onSubmit={handleSubmit}
-          />
+          <Action.SubmitForm title="Authenticate" icon={{ source: Icon.PlusSquare }} onSubmit={handleSubmit} />
         </ActionPanel>
       }
     >
@@ -124,20 +123,17 @@ export function AuthenticateNewOrg(props: {
         <Form.Dropdown.Item value="prod" title="Production" icon="💼" />
         <Form.Dropdown.Item value="dev" title="Developer Hub" icon="💻" />
       </Form.Dropdown>
-      {orgType === "custom" ? <Form.TextField title="Custom URL"{...itemProps.url} /> : <></>}
+      {orgType === "custom" ? <Form.TextField title="Custom URL" {...itemProps.url} /> : <></>}
       <Form.TextField title="Org Alias" {...itemProps.alias} />
-      <Form.TextField title="Label" {...itemProps.label}/>
-      <Form.TextField title="Color (Hex Code)" {...itemProps.color}/>
-      <Form.Dropdown title="Section"{...itemProps.section} onChange={setSection}>
+      <Form.TextField title="Label" {...itemProps.label} />
+      <Form.TextField title="Color (Hex Code)" {...itemProps.color} />
+      <Form.Dropdown title="Section" {...itemProps.section} onChange={setSection}>
         {sections.map((sect, index) => (
           <Form.Dropdown.Item key={index} value={sect} title={sect} />
         ))}
       </Form.Dropdown>
       {section === NEW_SECTION_LABEL ? (
-        <Form.TextField
-        {...itemProps.newSectionName}
-          title="New Section Name"
-        />
+        <Form.TextField {...itemProps.newSectionName} title="New Section Name" />
       ) : undefined}
     </Form>
   );
