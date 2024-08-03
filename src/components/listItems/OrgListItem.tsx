@@ -6,7 +6,7 @@ import { AuthenticateNewOrg, DeveloperOrgDetails } from "../pages";
 
 export function OrgListItem (props: { index: number, org:DeveloperOrg}) {
     const { index, org } = props
-    const {dispatch} = useMultiForceContext()
+    const {orgs, dispatch} = useMultiForceContext()
     const { setIsLoading} = useLoadingContext();
 
     const handleOrgSelection = async (orgAlias: string) => {
@@ -65,8 +65,8 @@ export function OrgListItem (props: { index: number, org:DeveloperOrg}) {
                         shortcut={{ modifiers: ["cmd"], key: "return" }}
                     />
                     <Action.Push
-                        title="New"
-                        target={<AuthenticateNewOrg dispatch={dispatch} />}
+                        title="Authenticate"
+                        target={<AuthenticateNewOrg orgs={orgs} dispatch={dispatch} />}
                         icon={{ source: Icon.PlusSquare }}
                         shortcut={Keyboard.Shortcut.Common.New}
                     />

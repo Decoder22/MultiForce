@@ -1,4 +1,4 @@
-import { Action, ActionPanel, Detail, Keyboard } from "@raycast/api";
+import { Action, ActionPanel, Detail, Icon, Keyboard } from "@raycast/api";
 import { AuthenticateNewOrg } from "./AuthenticateNewOrg";
 import { useMultiForceContext } from "../providers/OrgListProvider";
 
@@ -13,8 +13,9 @@ export function EmptyOrgList() {
       actions={
         <ActionPanel>
           <Action.Push
-            title="Authenticate a New Org"
+            title="Authenticate"
             target={<AuthenticateNewOrg dispatch={dispatch} />}
+            icon={{ source: Icon.PlusSquare }}
             shortcut={Keyboard.Shortcut.Common.New}
           />
         </ActionPanel>

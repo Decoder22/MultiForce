@@ -31,12 +31,11 @@ async function executeLoginFlow(oauthConfig: OAuth2Config): Promise<AuthInfo> {
 }
 
 export async function authorizeOrg(toAuth: AuthenticateNewOrgFormData) {
-  process.env["SF_DISABLE_LOG_FILE"] = "true";
-  const oauthConfig: OAuth2Config = {
-    loginUrl: await resolveLoginUrl(toAuth.url),
-  };
-
   try {
+    process.env["SF_DISABLE_LOG_FILE"] = "true";
+    const oauthConfig: OAuth2Config = {
+      loginUrl: await resolveLoginUrl(toAuth.url),
+    };
     const authInfo = await executeLoginFlow(oauthConfig);
     await authInfo.handleAliasAndDefaultSettings({
       alias: toAuth.alias,

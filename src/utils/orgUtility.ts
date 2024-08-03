@@ -6,6 +6,10 @@ export function deduplicateList(orgs:DeveloperOrg[]):DeveloperOrg[] {
     return Array.from(newOrgsMap.values()).flat()
 }
 
+export function flattenOrgMap(orgs: Map<string,DeveloperOrg[]>):DeveloperOrg[] {
+    return Array.from(orgs.values()).flat()
+}
+
 export function combineOrgList(existingOrgs:DeveloperOrg[], newOrgs:DeveloperOrg[]): DeveloperOrg[] {
 
 
@@ -44,5 +48,5 @@ export function orgListsAreDifferent(orgs1: DeveloperOrg[], orgs2: DeveloperOrg[
   
     // If the size of the intersection is not equal to the size of either set,
     // there is a discrepancy (meaning some aliases are missing or extra)
-    return intersection.size !== aliases1.size || intersection.size !== aliases2.size;
+    return intersection.size !== aliases1.size || intersection.size !== aliases2.size || orgs1.length !== orgs2.length
 }
