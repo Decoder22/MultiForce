@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { ActionPanel, Action, Form, popToRoot } from "@raycast/api";
-import { AuthenticateNewOrgFormData, DeveloperOrg } from "../models/models";
-import { authorizeOrg } from "../utils/sf";
-import { loadOrgs, saveOrgs } from "../utils/storage-management";
-import { MISC_ORGS_SECTION_LABEL, NEW_SECTION_LABEL } from "../utils/constants";
+import { authorizeOrg,loadOrgs } from "../../utils"
+import { MISC_ORGS_SECTION_LABEL, NEW_SECTION_LABEL, HEX_REGEX } from "../../constants";
+import { OrgListReducerAction, OrgListReducerType, AuthenticateNewOrgFormData, DeveloperOrg } from "../../types";
 
-const HEX_REGEX = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{8}|[A-Fa-f0-9]{4})$/;
-
-export function AuthenticateNewOrg(props: { callback: () => Promise<void> }) {
+export function AuthenticateNewOrg(props: { 
+  dispatch: Dispatch<OrgListReducerAction>
+}
+) {
+  const { dispatch } = props
   const [orgType, setOrgType] = useState<string>();
   const [section, setSection] = useState<string>();
   const [showNewSelection, setShowNewSelection] = useState<boolean>(false);
@@ -35,11 +36,10 @@ export function AuthenticateNewOrg(props: { callback: () => Promise<void> }) {
   const addOrg = async (org: DeveloperOrg) => {
     console.log("Added Org");
     try {
-      const storedOrgs = await loadOrgs();
-      storedOrgs!.push(org);
-      storedOrgs!.sort((a, b) => a.alias.localeCompare(b.alias));
-      saveOrgs(storedOrgs!);
-      props.callback();
+      dispatch({
+        type: OrgListReducerType.ADD_ORG,
+        newOrg: org
+      })
     } catch (ex) {
       console.error(ex);
     }

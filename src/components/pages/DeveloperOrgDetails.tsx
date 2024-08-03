@@ -1,18 +1,19 @@
 import { Form } from "@raycast/api";
-import { DeveloperOrg } from "../models/models";
-import { loadOrgs, updateOrg } from "../utils/storage-management";
-import { useEffect, useState } from "react";
-import { MISC_ORGS_SECTION_LABEL, NEW_SECTION_LABEL } from "../utils/constants";
-
-const HEX_REGEX = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3}|[A-Fa-f0-9]{8}|[A-Fa-f0-9]{4})$/;
+import { loadOrgs, updateOrg } from "../../utils";
+import { Dispatch, useEffect, useState } from "react";
+import { MISC_ORGS_SECTION_LABEL, NEW_SECTION_LABEL, HEX_REGEX } from "../../constants";
+import { OrgListReducerAction, OrgListReducerType, DeveloperOrg } from "../../types";
 
 export function DeveloperOrgDetails(props: {
-  org: DeveloperOrg;
-  callback: (shouldShowToast: boolean) => Promise<void>;
+  org: DeveloperOrg,
+  dispatch: Dispatch<OrgListReducerAction>
 }) {
-  const [label, setLabel] = useState<string>(props.org.label ?? "");
+
+  const {org, dispatch} = props
+  
+  const [label, setLabel] = useState<string>(org.label ?? "");
   const [colorError, setColorError] = useState<string>();
-  const [color, setColor] = useState<string>(props.org.color ?? "#0000FF");
+  const [color, setColor] = useState<string>(org.color ?? "#0000FF");
   const [section, setSection] = useState<string>();
   const [showNewSelection, setShowNewSelection] = useState<boolean>(false);
   const [showNewSelectionError, setShowNewSelectionError] = useState<string>();
@@ -26,30 +27,35 @@ export function DeveloperOrgDetails(props: {
         for (const org of storedOrgs!) {
           if (org.section) sects.add(org.section);
         }
-        console.log("FOUND SECTIONS: " + (Array.from(sects) as string[]));
         setSections([MISC_ORGS_SECTION_LABEL, ...Array.from(sects), NEW_SECTION_LABEL]);
-        setSection(props.org.section ?? MISC_ORGS_SECTION_LABEL);
+        setSection(org.section ?? MISC_ORGS_SECTION_LABEL);
       }
     }
     getSectionList();
   }, []);
 
   const handleLabelChange = async (lbl: string) => {
-    if (lbl !== props.org.label) {
-      props.org.label = lbl;
+    if (lbl !== org.label) {
+      org.label = lbl;
       setLabel(lbl);
-      await updateOrg(props.org);
-      props.callback(false);
+      await updateOrg(org);
+      dispatch({
+        type: OrgListReducerType.UPDATE_ORG,
+        updatedOrg: org 
+      })
     }
   };
 
   const handleColorChange = async (clr: string) => {
-    if (clr != props.org.color) {
+    if (clr != org.color) {
       if (HEX_REGEX.test(clr)) {
         setColorError(undefined);
-        (props.org.color = clr), setColor(clr);
-        await updateOrg(props.org);
-        props.callback(false);
+        (org.color = clr), setColor(clr);
+        await updateOrg(org);
+        dispatch({
+          type: OrgListReducerType.UPDATE_ORG,
+          updatedOrg: org 
+        })
       } else {
         setColor(clr);
         setColorError("Color must be a valid HEX Color. For example #0000FF for blue.");
@@ -58,13 +64,16 @@ export function DeveloperOrgDetails(props: {
   };
 
   const handleSectionChange = async (sect: string) => {
-    if (sect !== props.org.section) {
+    if (sect !== org.section) {
       if (sect !== "New Section") {
         setShowNewSelection(false);
         setSection(sect);
-        props.org.section = sect;
-        await updateOrg(props.org);
-        props.callback(false);
+        org.section = sect;
+        await updateOrg(org);
+        dispatch({
+          type: OrgListReducerType.UPDATE_ORG,
+          updatedOrg: org 
+        })
       } else {
         setSection(sect);
         setShowNewSelection(true);
@@ -75,22 +84,25 @@ export function DeveloperOrgDetails(props: {
   const createNewSection = async (sect: string) => {
     if (sect) {
       setShowNewSelectionError(undefined);
-      props.org.section = sect;
-      await updateOrg(props.org);
-      props.callback(false);
+      org.section = sect;
+      await updateOrg(org);
+      dispatch({
+        type: OrgListReducerType.UPDATE_ORG,
+        updatedOrg: org 
+      })
     } else {
       setShowNewSelectionError("Please enter a section name.");
     }
   };
 
-  const title = `${props.org.label ?? ""} Details`;
+  const title = `${org.label ?? ""} Details`;
 
   return (
     <Form>
       <Form.Description title={title} text="" />
-      <Form.Description title="Org URL" text={props.org.instanceUrl} />
-      <Form.Description title="Username" text={props.org.username} />
-      <Form.Description title="Org Alias" text={props.org.alias} />
+      <Form.Description title="Org URL" text={org.instanceUrl} />
+      <Form.Description title="Username" text={org.username} />
+      <Form.Description title="Org Alias" text={org.alias} />
       <Form.TextField id="label" title="Label" value={label} onChange={handleLabelChange} />
       <Form.TextField
         id="color"
