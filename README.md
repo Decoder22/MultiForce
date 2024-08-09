@@ -17,7 +17,7 @@ Each org on the list comes with built in actions that you can take!
 | -------- | ------- |
 | Enter  | Open the selected org in your browser and navigate to your default path. |
 | ⌘ Enter  | Edit the selected org. |
-| ⌃ X | Delete the selected org from your list. (Note, this will also remove it as an org from the SF command and VSCode).     |
-| ⌘ S | Navigate to the Salesforce Setup of your selected org.  |
 | ⌘ H | Navigate to the Lightning Home page of the last app you opened in Salesforce.  |
+| ⌘ S | Navigate to the Salesforce Setup of your selected org.  |
 | ⌘ N | Add a new Salesforce Org to your list. |
+| ⌃ X | Delete the selected org from your list. (Note, this will also remove it as an org from the SF command and VSCode).     |
