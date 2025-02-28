@@ -137,12 +137,16 @@ export function DeveloperOrgDetails(props: { org: DeveloperOrg; dispatch: Dispat
       {org.expirationDate && (
         <Form.Description 
           title="Expiration Date" 
-          text={new Date(org.expirationDate).toLocaleDateString(undefined, { 
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          })}
+          text={(() => {
+            const [year, month, day] = org.expirationDate.split('-').map(Number);
+            const date = new Date(year, month - 1, day); // month is 0-based in JS
+            return date.toLocaleDateString(undefined, { 
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            });
+          })()}
         />
       )}
       <Form.TextField

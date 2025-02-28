@@ -21,9 +21,13 @@ import { HOME_PATH, SETUP_PATH } from "../../constants";
 const getExpirationStatus = (org: DeveloperOrg): { icon?: Icon; tooltip?: string; tintColor?: Color } => {
   if (!org.expirationDate) return {};
 
-  const expirationDate = new Date(org.expirationDate);
+  // Parse the date and set it to midnight in local timezone
+  const [year, month, day] = org.expirationDate.split('-').map(Number);
+  const expirationDate = new Date(year, month - 1, day); // month is 0-based in JS
   const now = new Date();
-  const daysUntilExpiration = Math.ceil((expirationDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // midnight today
+  
+  const daysUntilExpiration = Math.ceil((expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
   if (daysUntilExpiration <= 0) {
     return {

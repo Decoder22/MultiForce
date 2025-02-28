@@ -41,7 +41,7 @@ export async function getOrgList(): Promise<DeveloperOrg[]> {
   });
 
   const orgs = await Promise.all(orgsPromises);
-  return orgs;
+   return orgs;
 }
 
 async function executeLoginFlow(oauthConfig: OAuth2Config): Promise<AuthInfo> {
