@@ -135,16 +135,16 @@ export function DeveloperOrgDetails(props: { org: DeveloperOrg; dispatch: Dispat
       <Form.Description title="Username" text={org.username} />
       <Form.Description title="Org Alias" text={org.alias} />
       {org.expirationDate && (
-        <Form.Description 
-          title="Expiration Date" 
+        <Form.Description
+          title="Expiration Date"
           text={(() => {
-            const [year, month, day] = org.expirationDate.split('-').map(Number);
+            const [year, month, day] = org.expirationDate.split("-").map(Number);
             const date = new Date(year, month - 1, day); // month is 0-based in JS
-            return date.toLocaleDateString(undefined, { 
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
+            return date.toLocaleDateString(undefined, {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
             });
           })()}
         />

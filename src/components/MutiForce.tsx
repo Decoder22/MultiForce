@@ -10,7 +10,7 @@ import { RECENTLY_USED_SECTION } from "../constants";
 // Helper function to get recently used orgs
 const getRecentlyUsedOrgs = (orgs: DeveloperOrg[]): DeveloperOrg[] => {
   return orgs
-    .filter(org => org.lastViewedAt && org.lastViewedAt > 0)
+    .filter((org) => org.lastViewedAt && org.lastViewedAt > 0)
     .sort((a, b) => (b.lastViewedAt || 0) - (a.lastViewedAt || 0))
     .slice(0, 3); // Show last 3 used orgs
 };
@@ -69,7 +69,6 @@ export default function MultiForce() {
   const allOrgs = useMemo(() => Array.from(orgs.values()).flat(), [orgs]);
   const recentlyUsedOrgs = useMemo(() => getRecentlyUsedOrgs(allOrgs), [allOrgs]);
 
-  console.log(orgs)
   return Array.from(orgs.keys()).length === 0 && !isLoading ? (
     <EmptyOrgList />
   ) : (

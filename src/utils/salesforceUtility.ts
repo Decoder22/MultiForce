@@ -23,7 +23,7 @@ import { HOME_PATH } from "../constants";
 export async function getOrgList(): Promise<DeveloperOrg[]> {
   process.env["SF_DISABLE_LOG_FILE"] = "true";
   const authInfos = await AuthInfo.listAllAuthorizations();
-  
+
   // Get detailed org info for each authorization
   const orgsPromises = authInfos.map(async (orgAuthorization: OrgAuthorization) => {
     const { username } = orgAuthorization;
@@ -31,17 +31,17 @@ export async function getOrgList(): Promise<DeveloperOrg[]> {
     const authInfo = await AuthInfo.create({ username });
     // Get the fields directly from AuthInfo
     const fields = authInfo.getFields(true); // Pass true to get all fields
-    
+
     return {
       alias: orgAuthorization.aliases && orgAuthorization.aliases.length > 0 ? orgAuthorization.aliases[0] : username,
       username,
       instanceUrl: orgAuthorization.instanceUrl ?? "",
-      expirationDate: fields.expirationDate
+      expirationDate: fields.expirationDate,
     };
   });
 
   const orgs = await Promise.all(orgsPromises);
-   return orgs;
+  return orgs;
 }
 
 async function executeLoginFlow(oauthConfig: OAuth2Config): Promise<AuthInfo> {

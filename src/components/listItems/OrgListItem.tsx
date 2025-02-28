@@ -22,11 +22,11 @@ const getExpirationStatus = (org: DeveloperOrg): { icon?: Icon; tooltip?: string
   if (!org.expirationDate) return {};
 
   // Parse the date and set it to midnight in local timezone
-  const [year, month, day] = org.expirationDate.split('-').map(Number);
+  const [year, month, day] = org.expirationDate.split("-").map(Number);
   const expirationDate = new Date(year, month - 1, day); // month is 0-based in JS
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // midnight today
-  
+
   const daysUntilExpiration = Math.ceil((expirationDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
   if (daysUntilExpiration <= 0) {
@@ -39,7 +39,7 @@ const getExpirationStatus = (org: DeveloperOrg): { icon?: Icon; tooltip?: string
   if (daysUntilExpiration <= 7) {
     return {
       icon: Icon.Warning,
-      tooltip: `Scratch org expires in ${daysUntilExpiration} day${daysUntilExpiration === 1 ? '' : 's'}`,
+      tooltip: `Scratch org expires in ${daysUntilExpiration} day${daysUntilExpiration === 1 ? "" : "s"}`,
       tintColor: Color.Yellow,
     };
   }
