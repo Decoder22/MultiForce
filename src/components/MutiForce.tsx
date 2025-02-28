@@ -1,10 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { List, showToast } from "@raycast/api";
 import { EmptyOrgList } from "./pages";
 import { OrgListReducerType, DeveloperOrg } from "../types";
 import { useLoadingContext, useMultiForceContext } from "./providers/OrgListProvider";
 import { OrgListItem } from "./listItems/OrgListItem";
 import { combineOrgList, getOrgList, loadOrgs, orgListsAreDifferent } from "../utils";
+import { RECENTLY_VIEWED_SECTION } from "../constants";
+
+// Helper function to get recently viewed orgs
+const getRecentlyViewedOrgs = (orgs: DeveloperOrg[]): DeveloperOrg[] => {
+  return orgs
+    .filter(org => org.lastViewedAt && org.lastViewedAt > 0)
+    .sort((a, b) => (b.lastViewedAt || 0) - (a.lastViewedAt || 0))
+    .slice(0, 5); // Show last 5 viewed orgs
+};
 
 export default function MultiForce() {
   const { orgs, dispatch } = useMultiForceContext();
@@ -57,17 +66,27 @@ export default function MultiForce() {
     checkStorage();
   }, []);
 
+  const allOrgs = useMemo(() => Array.from(orgs.values()).flat(), [orgs]);
+  const recentlyViewedOrgs = useMemo(() => getRecentlyViewedOrgs(allOrgs), [allOrgs]);
+
   return Array.from(orgs.keys()).length === 0 && !isLoading ? (
     <EmptyOrgList />
   ) : (
     <List isLoading={isLoading}>
+      {recentlyViewedOrgs.length > 0 && (
+        <List.Section title={RECENTLY_VIEWED_SECTION}>
+          {recentlyViewedOrgs.map((org, index) => (
+            <OrgListItem key={`recent-${index}`} index={index} org={org} />
+          ))}
+        </List.Section>
+      )}
       {Array.from(orgs.keys())
         .sort()
         .map((key, keyIndex) =>
           orgs.get(key) && orgs.get(key)!.length > 0 ? (
             <List.Section title={key} key={keyIndex}>
               {orgs.get(key)!.map((org, index) => (
-                <OrgListItem key={index} index={index} org={org}></OrgListItem>
+                <OrgListItem key={index} index={index} org={org} />
               ))}
             </List.Section>
           ) : null,

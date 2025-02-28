@@ -39,4 +39,5 @@ export interface DeveloperOrg {
   instanceUrl: string;
   section?: string;
   openToPath?: string;
+  lastViewedAt?: number;
 }

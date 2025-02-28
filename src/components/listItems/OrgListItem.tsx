@@ -30,6 +30,10 @@ export function OrgListItem(props: { index: number; org: DeveloperOrg }) {
     });
     try {
       await openOrg(orgAlias, url);
+      dispatch({
+        type: OrgListReducerType.UPDATE_ORG,
+        updatedOrg: { ...org, lastViewedAt: Date.now() },
+      });
       setIsLoading(false);
       toast.hide();
       popToRoot();
