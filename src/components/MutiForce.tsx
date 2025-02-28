@@ -5,14 +5,14 @@ import { OrgListReducerType, DeveloperOrg } from "../types";
 import { useLoadingContext, useMultiForceContext } from "./providers/OrgListProvider";
 import { OrgListItem } from "./listItems/OrgListItem";
 import { combineOrgList, getOrgList, loadOrgs, orgListsAreDifferent } from "../utils";
-import { RECENTLY_VIEWED_SECTION } from "../constants";
+import { RECENTLY_USED_SECTION } from "../constants";
 
-// Helper function to get recently viewed orgs
-const getRecentlyViewedOrgs = (orgs: DeveloperOrg[]): DeveloperOrg[] => {
+// Helper function to get recently used orgs
+const getRecentlyUsedOrgs = (orgs: DeveloperOrg[]): DeveloperOrg[] => {
   return orgs
     .filter(org => org.lastViewedAt && org.lastViewedAt > 0)
     .sort((a, b) => (b.lastViewedAt || 0) - (a.lastViewedAt || 0))
-    .slice(0, 5); // Show last 5 viewed orgs
+    .slice(0, 3); // Show last 3 used orgs
 };
 
 export default function MultiForce() {
@@ -67,15 +67,16 @@ export default function MultiForce() {
   }, []);
 
   const allOrgs = useMemo(() => Array.from(orgs.values()).flat(), [orgs]);
-  const recentlyViewedOrgs = useMemo(() => getRecentlyViewedOrgs(allOrgs), [allOrgs]);
+  const recentlyUsedOrgs = useMemo(() => getRecentlyUsedOrgs(allOrgs), [allOrgs]);
 
+  console.log(orgs)
   return Array.from(orgs.keys()).length === 0 && !isLoading ? (
     <EmptyOrgList />
   ) : (
     <List isLoading={isLoading}>
-      {recentlyViewedOrgs.length > 0 && (
-        <List.Section title={RECENTLY_VIEWED_SECTION}>
-          {recentlyViewedOrgs.map((org, index) => (
+      {recentlyUsedOrgs.length > 0 && (
+        <List.Section title={RECENTLY_USED_SECTION}>
+          {recentlyUsedOrgs.map((org, index) => (
             <OrgListItem key={`recent-${index}`} index={index} org={org} />
           ))}
         </List.Section>

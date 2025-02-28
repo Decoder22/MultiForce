@@ -40,4 +40,5 @@ export interface DeveloperOrg {
   section?: string;
   openToPath?: string;
   lastViewedAt?: number;
+  expirationDate?: string;
 }
