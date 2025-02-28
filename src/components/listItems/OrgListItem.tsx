@@ -32,7 +32,7 @@ const getExpirationStatus = (org: DeveloperOrg): { icon?: Icon; tooltip?: string
       tintColor: Color.Red,
     };
   }
-  if (daysUntilExpiration <= 15) {
+  if (daysUntilExpiration <= 7) {
     return {
       icon: Icon.Warning,
       tooltip: `Scratch org expires in ${daysUntilExpiration} day${daysUntilExpiration === 1 ? '' : 's'}`,
