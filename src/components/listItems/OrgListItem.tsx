@@ -9,10 +9,7 @@ import {
   Toast,
   confirmAlert,
   Alert,
-<<<<<<< HEAD
   Color,
-=======
->>>>>>> contributions/merge-1741021922315
 } from "@raycast/api";
 import { deleteOrg, openOrg } from "../../utils";
 import { useMultiForceContext, useLoadingContext } from "../providers/OrgListProvider";
@@ -20,7 +17,6 @@ import { OrgListReducerType, DeveloperOrg } from "../../types";
 import { AuthenticateNewOrg, DeveloperOrgDetails } from "../pages";
 import { HOME_PATH, SETUP_PATH } from "../../constants";
 
-<<<<<<< HEAD
 // Helper function to get expiration status
 const getExpirationStatus = (org: DeveloperOrg): { icon?: Icon; tooltip?: string; tintColor?: Color } => {
   if (!org.expirationDate) return {};
@@ -50,8 +46,6 @@ const getExpirationStatus = (org: DeveloperOrg): { icon?: Icon; tooltip?: string
   return {};
 };
 
-=======
->>>>>>> contributions/merge-1741021922315
 export function OrgListItem(props: { index: number; org: DeveloperOrg }) {
   const { index, org } = props;
   const { orgs, dispatch } = useMultiForceContext();
@@ -66,13 +60,10 @@ export function OrgListItem(props: { index: number; org: DeveloperOrg }) {
     });
     try {
       await openOrg(orgAlias, url);
-<<<<<<< HEAD
       dispatch({
         type: OrgListReducerType.UPDATE_ORG,
         updatedOrg: { ...org, lastViewedAt: Date.now() },
       });
-=======
->>>>>>> contributions/merge-1741021922315
       setIsLoading(false);
       toast.hide();
       popToRoot();
@@ -110,17 +101,13 @@ export function OrgListItem(props: { index: number; org: DeveloperOrg }) {
     }
   };
 
-<<<<<<< HEAD
   const expirationStatus = getExpirationStatus(org);
 
-=======
->>>>>>> contributions/merge-1741021922315
   return (
     <List.Item
       key={index}
       icon={{ source: "Salesforce.com_logo.svg.png", tintColor: org.color ?? "#0000FF" }}
       title={org.label ? `${org.label} (${org.alias})` : org.alias}
-<<<<<<< HEAD
       accessories={
         expirationStatus.icon
           ? [
@@ -135,8 +122,6 @@ export function OrgListItem(props: { index: number; org: DeveloperOrg }) {
             ]
           : undefined
       }
-=======
->>>>>>> contributions/merge-1741021922315
       actions={
         <ActionPanel>
           <Action
