@@ -42,4 +42,7 @@ export const SECTION_DESCRIPTION =
 export const NEW_SECTION_NAME_LABEL = "New Section Name";
 export const NEW_SECTION_DESCRIPTION =
   "Enter a new name for grouping your orgs into sections. When you save an org with a new section name, the option will get added to the Section dropdown above.";
+<<<<<<< HEAD
 export const RECENTLY_USED_SECTION = "Recently Used";
+=======
+>>>>>>> contributions/merge-1741021922315

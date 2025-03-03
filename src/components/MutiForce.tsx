@@ -1,10 +1,15 @@
+<<<<<<< HEAD
 import { useEffect, useMemo } from "react";
+=======
+import { useEffect } from "react";
+>>>>>>> contributions/merge-1741021922315
 import { List, showToast } from "@raycast/api";
 import { EmptyOrgList } from "./pages";
 import { OrgListReducerType, DeveloperOrg } from "../types";
 import { useLoadingContext, useMultiForceContext } from "./providers/OrgListProvider";
 import { OrgListItem } from "./listItems/OrgListItem";
 import { combineOrgList, getOrgList, loadOrgs, orgListsAreDifferent } from "../utils";
+<<<<<<< HEAD
 import { RECENTLY_USED_SECTION } from "../constants";
 
 // Helper function to get recently used orgs
@@ -14,6 +19,8 @@ const getRecentlyUsedOrgs = (orgs: DeveloperOrg[]): DeveloperOrg[] => {
     .sort((a, b) => (b.lastViewedAt || 0) - (a.lastViewedAt || 0))
     .slice(0, 3); // Show last 3 used orgs
 };
+=======
+>>>>>>> contributions/merge-1741021922315
 
 export default function MultiForce() {
   const { orgs, dispatch } = useMultiForceContext();
@@ -66,13 +73,17 @@ export default function MultiForce() {
     checkStorage();
   }, []);
 
+<<<<<<< HEAD
   const allOrgs = useMemo(() => Array.from(orgs.values()).flat(), [orgs]);
   const recentlyUsedOrgs = useMemo(() => getRecentlyUsedOrgs(allOrgs), [allOrgs]);
 
+=======
+>>>>>>> contributions/merge-1741021922315
   return Array.from(orgs.keys()).length === 0 && !isLoading ? (
     <EmptyOrgList />
   ) : (
     <List isLoading={isLoading}>
+<<<<<<< HEAD
       {recentlyUsedOrgs.length > 0 && (
         <List.Section title={RECENTLY_USED_SECTION}>
           {recentlyUsedOrgs.map((org, index) => (
@@ -80,13 +91,19 @@ export default function MultiForce() {
           ))}
         </List.Section>
       )}
+=======
+>>>>>>> contributions/merge-1741021922315
       {Array.from(orgs.keys())
         .sort()
         .map((key, keyIndex) =>
           orgs.get(key) && orgs.get(key)!.length > 0 ? (
             <List.Section title={key} key={keyIndex}>
               {orgs.get(key)!.map((org, index) => (
+<<<<<<< HEAD
                 <OrgListItem key={index} index={index} org={org} />
+=======
+                <OrgListItem key={index} index={index} org={org}></OrgListItem>
+>>>>>>> contributions/merge-1741021922315
               ))}
             </List.Section>
           ) : null,

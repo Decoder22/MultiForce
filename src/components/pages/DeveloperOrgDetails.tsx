@@ -43,11 +43,20 @@ export function DeveloperOrgDetails(props: { org: DeveloperOrg; dispatch: Dispat
   };
 
   const setPathValue = (path: string) => {
+<<<<<<< HEAD
+=======
+    console.log("Set path value: " + path);
+>>>>>>> contributions/merge-1741021922315
     setPath(path);
     setValue("openToPath", path);
   };
 
   useEffect(() => {
+<<<<<<< HEAD
+=======
+    console.log("Use effect");
+    console.log(org);
+>>>>>>> contributions/merge-1741021922315
     async function getSectionList() {
       const storedOrgs = await loadOrgs();
       const sects = new Set<string>();
@@ -68,6 +77,10 @@ export function DeveloperOrgDetails(props: { org: DeveloperOrg; dispatch: Dispat
           : org.openToPath
             ? CUSTOM_KEY
             : HOME_PATH;
+<<<<<<< HEAD
+=======
+      console.log(`Opening to path: ${pathToOpen}`);
+>>>>>>> contributions/merge-1741021922315
       setPathValue(pathToOpen);
     }
     setValue("color", org.color ?? DEFAULT_COLOR);
@@ -95,6 +108,10 @@ export function DeveloperOrgDetails(props: { org: DeveloperOrg; dispatch: Dispat
       if (values.customPath) {
         updatedOrg.openToPath = values.customPath;
       }
+<<<<<<< HEAD
+=======
+      console.log(updatedOrg);
+>>>>>>> contributions/merge-1741021922315
       dispatch({
         type: OrgListReducerType.UPDATE_ORG,
         updatedOrg: updatedOrg,
@@ -134,6 +151,7 @@ export function DeveloperOrgDetails(props: { org: DeveloperOrg; dispatch: Dispat
       <Form.Description title="Org URL" text={org.instanceUrl} />
       <Form.Description title="Username" text={org.username} />
       <Form.Description title="Org Alias" text={org.alias} />
+<<<<<<< HEAD
       {org.expirationDate && (
         <Form.Description
           title="Expiration Date"
@@ -149,6 +167,8 @@ export function DeveloperOrgDetails(props: { org: DeveloperOrg; dispatch: Dispat
           })()}
         />
       )}
+=======
+>>>>>>> contributions/merge-1741021922315
       <Form.TextField
         title={ORG_LABEL_LABEL}
         {...itemProps.label}

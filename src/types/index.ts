@@ -39,6 +39,9 @@ export interface DeveloperOrg {
   instanceUrl: string;
   section?: string;
   openToPath?: string;
+<<<<<<< HEAD
   lastViewedAt?: number;
   expirationDate?: string;
+=======
+>>>>>>> contributions/merge-1741021922315
 }
